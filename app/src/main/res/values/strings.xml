@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LoftMoney</string>
+    <string name="name_hint">Name</string>
+    <string name="price_hint">Price</string>
+    <string name="add_button">ADD</string>
+    />
+</resources>
