@@ -1,6 +1,7 @@
 package com.example.loftmoney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,5 +51,11 @@ public class MainActivity extends AppCompatActivity {
                     LinearLayoutManager.VERTICAL, false);
 
             itemsView.setLayoutManager(layoutManager);
+
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration
+                    (itemsView.getContext(),
+                    layoutManager.getOrientation());
+
+           itemsView.addItemDecoration(dividerItemDecoration);
     }
 }
