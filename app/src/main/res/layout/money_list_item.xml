@@ -17,8 +17,7 @@
         android:layout_weight="1"
         android:fontFamily="sans-serif-medium"
         android:textColor="#666664"
-        android:textSize="20sp"
-        tools:text="Зубная щетка" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_price"
@@ -29,7 +28,6 @@
         android:fontFamily="sans-serif-medium"
         android:gravity="right"
         android:textColor="#4a90e2"
-        android:textSize="20sp"
-        tools:text="70р" />
+        android:textSize="20sp" />
 
 </LinearLayout>

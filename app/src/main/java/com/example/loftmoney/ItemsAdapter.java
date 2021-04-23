@@ -16,10 +16,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     private List<Item> moneyItemList = new ArrayList<>();
 
-
-    public void setItems (List<Item> moneyItems) {
+    public void setData(List<Item> moneyItems) {
         moneyItemList.clear();
         moneyItemList.addAll(moneyItems);
+
         notifyDataSetChanged();
     }
 
@@ -43,6 +43,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     @Override
     public int getItemCount() {
+
         return moneyItemList.size();
     }
 
