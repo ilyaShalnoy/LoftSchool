@@ -1,68 +1,51 @@
 package com.example.loftmoney;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private FloatingActionButton btnAdd;
-    private RecyclerView itemsView;
-    private ItemsAdapter itemsAdapter = new ItemsAdapter();
 
-    private List<Item> moneyItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        configureRecyclerView();
-        generateMoney(moneyItems);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
-        btnAdd = findViewById(R.id.addNewExpense);
+        ViewPager viewPager = findViewById(R.id.viewpager);
+        viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(),
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
 
-        btnAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
-            startActivityForResult(intent, 0);
-        });
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setText(R.string.expences);
+        tabLayout.getTabAt(1).setText(R.string.income);
+
     }
+
+    static class BudgetPagerAdapter extends FragmentPagerAdapter {
+
+        public BudgetPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
+        }
+
+        @NonNull
         @Override
-        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            String nameAdd = data.getStringExtra("name");
-            String priceAdd = data.getStringExtra("price");
-
-            moneyItems.add(new Item(nameAdd, priceAdd));
-            itemsAdapter.setData(moneyItems);
+        public Fragment getItem(int position) {
+            return new BudgetFragment();
         }
 
-        private void generateMoney(List<Item> moneyItems) {
-            itemsAdapter.setData(moneyItems);
+        @Override
+        public int getCount() {
+            return 2;
         }
-
-        private void configureRecyclerView() {
-            itemsView = findViewById(R.id.rv_items);
-            itemsView.setAdapter(itemsAdapter);
-
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
-                    LinearLayoutManager.VERTICAL, false);
-            itemsView.setLayoutManager(layoutManager);
-
-
-            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration
-                    (itemsView.getContext(),
-                    layoutManager.getOrientation());
-           itemsView.addItemDecoration(dividerItemDecoration);
     }
 }

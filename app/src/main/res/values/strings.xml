@@ -3,5 +3,7 @@
     <string name="name_hint">Name</string>
     <string name="price_hint">Price</string>
     <string name="add_button">ADD</string>
-    />
+    <string name="expences">Expences</string>
+    <string name="income">Income</string>
+    <string name="balance">Balance</string>/>
 </resources>
