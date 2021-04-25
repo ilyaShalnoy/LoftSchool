@@ -1,8 +1,8 @@
 package com.example.loftmoney;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +26,7 @@ public class BudgetFragment extends Fragment {
     private List<Item> moneyItems = new ArrayList<>();
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,8 +44,9 @@ public class BudgetFragment extends Fragment {
 
         itemsAdapter.setData(moneyItems);
 
-
         itemsView.setAdapter(itemsAdapter);
+
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);
@@ -57,13 +59,15 @@ public class BudgetFragment extends Fragment {
         itemsView.addItemDecoration(dividerItemDecoration);
 
 
+
+
         return view;
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String nameAdd = data.getStringExtra("name");
-        String priceAdd = data.getStringExtra("price" + "Р" );
+        String priceAdd = data.getStringExtra("price" );
 
         moneyItems.add(new Item(nameAdd, priceAdd));
         itemsAdapter.setData(moneyItems);

@@ -1,6 +1,7 @@
 package com.example.loftmoney;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
         public void bind(Item item) {
             name.setText(item.getName());
-            price.setText(item.getPrice());
+            price.setText(new SpannableString(item.getPrice() + " \u20BD"));
         }
     }
 }
