@@ -5,7 +5,7 @@
     <string name="name_hint">Наименование</string>
     <string name="price_hint">Цена</string>
     <string name="add_button">Добавить</string>
-    <string name="expences">Расходы</string>
+    <string name="expenses">Расходы</string>
     <string name="income">Доходы</string>
     <string name="balance">Баланс</string>/>
 </resources>

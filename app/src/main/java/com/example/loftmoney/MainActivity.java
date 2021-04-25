@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
 
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setText(R.string.expences);
+        tabLayout.getTabAt(0).setText(R.string.expenses);
         tabLayout.getTabAt(1).setText(R.string.income);
 
     }
@@ -40,7 +40,11 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            return new BudgetFragment();
+            if (position == 0) {
+                return new BudgetFragment_Expenses();
+            } else {
+                return new BudgetFragment_Income();
+            }
         }
 
         @Override

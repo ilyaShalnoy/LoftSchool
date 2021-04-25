@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
+public class ItemsAdapter_Expenses extends RecyclerView.Adapter<ItemsAdapter_Expenses.ItemViewHolder> {
 
-    private List<Item> moneyItemList = new ArrayList<>();
+    private List<ItemModel> moneyItemModelList = new ArrayList<>();
 
-    public void setData(List<Item> moneyItems) {
-        moneyItemList.clear();
-        moneyItemList.addAll(moneyItems);
+    public void setData(List<ItemModel> moneyItemModels) {
+        moneyItemModelList.clear();
+        moneyItemModelList.addAll(moneyItemModels);
 
         notifyDataSetChanged();
     }
@@ -28,7 +28,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        int layoutIdForListItem = R.layout.money_list_item;
+        int layoutIdForListItem = R.layout.money_item_expensess;
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(layoutIdForListItem, parent, false);
@@ -39,13 +39,13 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
 
-        holder.bind(moneyItemList.get(position));
+        holder.bind(moneyItemModelList.get(position));
     }
 
     @Override
     public int getItemCount() {
 
-        return moneyItemList.size();
+        return moneyItemModelList.size();
     }
 
 
@@ -57,13 +57,13 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            name = itemView.findViewById(R.id.tv_name);
-            price = itemView.findViewById(R.id.tv_price);
+            name = itemView.findViewById(R.id.tv_name_expenses);
+            price = itemView.findViewById(R.id.tv_price_expenses);
         }
 
-        public void bind(Item item) {
-            name.setText(item.getName());
-            price.setText(new SpannableString(item.getPrice() + " \u20BD"));
+        public void bind(ItemModel itemModel) {
+            name.setText(itemModel.getName());
+            price.setText(new SpannableString(itemModel.getPrice() + " \u20BD"));
         }
     }
 }

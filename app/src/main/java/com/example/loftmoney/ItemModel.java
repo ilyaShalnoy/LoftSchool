@@ -2,11 +2,13 @@ package com.example.loftmoney;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class Item {
+public class ItemModel {
     private String name;
     private String price;
 
-    public Item(String name, String price) {
+
+
+    public ItemModel(String name, String price) {
         this.name = name;
         this.price = price;
     }
@@ -19,6 +21,7 @@ public class Item {
         this.price = price;
     }
 
+
     public String getName() {
         return name;
     }
@@ -26,6 +29,7 @@ public class Item {
     public String getPrice() {
         return price;
     }
+
 }
 
 

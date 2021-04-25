@@ -2,7 +2,6 @@ package com.example.loftmoney;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BudgetFragment extends Fragment {
+public class BudgetFragment_Income extends Fragment {
     private FloatingActionButton btnAdd;
     private RecyclerView itemsView;
-    private ItemsAdapter itemsAdapter = new ItemsAdapter();
-    private List<Item> moneyItems = new ArrayList<>();
+    private ItemsAdapter_Income itemsAdapter_income = new ItemsAdapter_Income();
+    private List<ItemModel> moneyItemModels = new ArrayList<>();
 
 
 
@@ -42,11 +41,9 @@ public class BudgetFragment extends Fragment {
             startActivityForResult(intent, 0);
         });
 
-        itemsAdapter.setData(moneyItems);
+        itemsAdapter_income.setData(moneyItemModels);
 
-        itemsView.setAdapter(itemsAdapter);
-
-
+        itemsView.setAdapter(itemsAdapter_income);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);
@@ -69,7 +66,7 @@ public class BudgetFragment extends Fragment {
         String nameAdd = data.getStringExtra("name");
         String priceAdd = data.getStringExtra("price" );
 
-        moneyItems.add(new Item(nameAdd, priceAdd));
-        itemsAdapter.setData(moneyItems);
+        moneyItemModels.add(new ItemModel(nameAdd, priceAdd));
+        itemsAdapter_income.setData(moneyItemModels);
     }
 }

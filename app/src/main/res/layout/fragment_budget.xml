@@ -11,7 +11,7 @@
         android:id="@+id/rv_items"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/money_list_item"/>
+        tools:listitem="@layout/money_item_expensess"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addNewExpense"
