@@ -8,19 +8,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemsAdapter_Expenses extends RecyclerView.Adapter<ItemsAdapter_Expenses.ItemViewHolder> {
+public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     private List<ItemModel> moneyItemModelList = new ArrayList<>();
 
     public void setData(List<ItemModel> moneyItemModels) {
         moneyItemModelList.clear();
         moneyItemModelList.addAll(moneyItemModels);
-
         notifyDataSetChanged();
     }
 
@@ -64,6 +64,11 @@ public class ItemsAdapter_Expenses extends RecyclerView.Adapter<ItemsAdapter_Exp
         public void bind(ItemModel itemModel) {
             name.setText(itemModel.getName());
             price.setText(new SpannableString(itemModel.getPrice() + " \u20BD"));
+            if (itemModel.getPosition() == 0) {
+                price.setTextColor(ContextCompat.getColor(price.getContext(), R.color.priceColor));
+            } else if (itemModel.getPosition() == 1) {
+                price.setTextColor(ContextCompat.getColor(price.getContext(), R.color.priceColor_2));
+            }
         }
     }
 }

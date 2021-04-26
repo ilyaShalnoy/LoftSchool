@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+
 import com.google.android.material.tabs.TabLayout;
 
 
@@ -20,10 +21,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
-
         ViewPager viewPager = findViewById(R.id.viewpager);
-        viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(),
-                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
+
+        viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setText(R.string.expenses);
@@ -40,11 +40,10 @@ public class MainActivity extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            if (position == 0) {
-                return new BudgetFragment_Expenses();
-            } else {
-                return new BudgetFragment_Income();
-            }
+            if (position < 2) {
+                return BudgetFragment.newInstance(position);
+            } else
+                return null;
         }
 
         @Override
