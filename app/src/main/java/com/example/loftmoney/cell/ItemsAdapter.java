@@ -1,4 +1,4 @@
-package com.example.loftmoney;
+package com.example.loftmoney.cell;
 
 import android.content.Context;
 import android.text.SpannableString;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.loftmoney.R;
 
 import java.util.ArrayList;
 import java.util.List;

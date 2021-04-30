@@ -1,6 +1,6 @@
-package com.example.loftmoney;
+package com.example.loftmoney.cell;
 
-import androidx.recyclerview.widget.RecyclerView;
+import com.example.loftmoney.remote.MoneyRemoteItem;
 
 public class ItemModel {
     private String name;
@@ -13,14 +13,9 @@ public class ItemModel {
         this.position = position;
     }
 
-    public void setName(String name) {
+    public ItemModel(String name, double price) {
         this.name = name;
     }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
 
     public String getName() {
         return name;
@@ -31,6 +26,10 @@ public class ItemModel {
     }
 
     public int getPosition() { return position; }
+
+    public static ItemModel getInstance (MoneyRemoteItem moneyRemoteItem) {
+        return new ItemModel(moneyRemoteItem.getName(), moneyRemoteItem.getPrice());
+    }
 
 }
 

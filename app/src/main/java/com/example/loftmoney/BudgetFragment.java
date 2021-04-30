@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,10 +14,20 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.loftmoney.cell.ItemModel;
+import com.example.loftmoney.cell.ItemsAdapter;
+import com.example.loftmoney.remote.MoneyRemoteItem;
+import com.example.loftmoney.remote.MoneyResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class BudgetFragment extends Fragment {
 
@@ -28,6 +39,7 @@ public class BudgetFragment extends Fragment {
     private ItemsAdapter itemsAdapter = new ItemsAdapter();
     private List<ItemModel> moneyItemModels = new ArrayList<>();
     private int currentPosition;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,25 +57,30 @@ public class BudgetFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget, null);
         recyclerView = view.findViewById(R.id.recycler);
-        btnAdd = view.findViewById(R.id.add_new_expense);
 
+        btnAdd = view.findViewById(R.id.add_new_expense);
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddItemActivity.class);
             startActivityForResult(intent, REQUEST_CODE);
         });
 
-        //TODO "Продумать"
-//        itemsAdapter.setData(moneyItemModels);
         recyclerView.setAdapter(itemsAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
+        loadItems();
+
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     @Override
@@ -82,5 +99,23 @@ public class BudgetFragment extends Fragment {
         args.putInt(ARG_POSITION, position);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void loadItems() {
+        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems("income")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(moneyResponse -> {
+                    if (moneyResponse.getStatus().equals("success")) {
+                        for (MoneyRemoteItem moneyRemoteItem : moneyResponse.getMoneyItemsList()) {
+                            moneyItemModels.add(ItemModel.getInstance(moneyRemoteItem));
+                        }
+                        itemsAdapter.setData(moneyItemModels);
+                    } else {
+                        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.connection_lost), Toast.LENGTH_LONG).show();
+                    }
+                }, throwable -> Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+
+        compositeDisposable.add(disposable);
     }
 }
