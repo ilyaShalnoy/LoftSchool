@@ -7,8 +7,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 
@@ -24,6 +27,14 @@ public class MainActivity extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.viewpager);
 
         viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.add_new_expense);
+        floatingActionButton.setOnClickListener(v -> {
+            final int activeFragmentIndex = viewPager.getCurrentItem();
+            Fragment activeFragment = getSupportFragmentManager().getFragments().get(activeFragmentIndex);
+            Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+            activeFragment.startActivityForResult(intent, BudgetFragment.REQUEST_CODE);
+        });
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setText(R.string.expenses);

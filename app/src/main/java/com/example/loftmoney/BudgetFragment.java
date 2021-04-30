@@ -34,7 +34,6 @@ public class BudgetFragment extends Fragment {
     public static final int REQUEST_CODE = 0;
     public static final String ARG_POSITION = "position";
 
-    private FloatingActionButton btnAdd;
     private RecyclerView recyclerView;
     private ItemsAdapter itemsAdapter = new ItemsAdapter();
     private List<ItemModel> moneyItemModels = new ArrayList<>();
@@ -57,12 +56,6 @@ public class BudgetFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget, null);
         recyclerView = view.findViewById(R.id.recycler);
-
-        btnAdd = view.findViewById(R.id.add_new_expense);
-        btnAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddItemActivity.class);
-            startActivityForResult(intent, REQUEST_CODE);
-        });
 
         recyclerView.setAdapter(itemsAdapter);
 
