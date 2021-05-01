@@ -10,5 +10,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fill_fields">"Please fill all fields "</string>
     <string name="success_added">Income added successfully</string>
-    <string name="connection_lost">Sorry, we cant load money list.</string>/>
+    <string name="connection_lost">Sorry, we cant load money list.</string>
+    <string name="activity_main_toolbar_title">Your budget</string>/>
 </resources>
