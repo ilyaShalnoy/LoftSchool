@@ -11,7 +11,7 @@ public class MoneyRemoteItem {
     private String name;
 
     @SerializedName("price")
-    private double price;
+    private String price;
 
     @SerializedName("type")
     private String type;
@@ -28,7 +28,7 @@ public class MoneyRemoteItem {
         return name;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 

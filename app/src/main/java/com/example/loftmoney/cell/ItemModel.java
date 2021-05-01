@@ -13,8 +13,9 @@ public class ItemModel {
         this.position = position;
     }
 
-    public ItemModel(String name, double price) {
+    public ItemModel(String name, String price) {
         this.name = name;
+        this.price = price;
     }
 
     public String getName() {
