@@ -20,6 +20,11 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     private List<ItemModel> moneyItemModelList = new ArrayList<>();
 
+    public void clearItems() {
+        moneyItemModelList.clear();
+        notifyDataSetChanged();
+    }
+
     public void setData(List<ItemModel> moneyItemModels) {
         moneyItemModelList.clear();
         moneyItemModelList.addAll(moneyItemModels);

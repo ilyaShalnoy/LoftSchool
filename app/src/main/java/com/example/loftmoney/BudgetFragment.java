@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.loftmoney.cell.ItemModel;
 import com.example.loftmoney.cell.ItemsAdapter;
@@ -35,10 +36,11 @@ public class BudgetFragment extends Fragment {
     public static final String ARG_POSITION = "position";
 
     private RecyclerView recyclerView;
-    private ItemsAdapter itemsAdapter = new ItemsAdapter();
+    private final ItemsAdapter itemsAdapter = new ItemsAdapter();
     private List<ItemModel> moneyItemModels = new ArrayList<>();
     private int currentPosition;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +58,14 @@ public class BudgetFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget, null);
         recyclerView = view.findViewById(R.id.recycler);
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadItems();
+            }
+        });
 
         recyclerView.setAdapter(itemsAdapter);
 
@@ -99,6 +109,8 @@ public class BudgetFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(moneyResponse -> {
+                    itemsAdapter.clearItems();
+                    swipeRefreshLayout.setRefreshing(false);
                     if (moneyResponse.getStatus().equals("success")) {
                         for (MoneyRemoteItem moneyRemoteItem : moneyResponse.getMoneyItemsList()) {
                             moneyItemModels.add(ItemModel.getInstance(moneyRemoteItem));
@@ -107,7 +119,11 @@ public class BudgetFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.connection_lost), Toast.LENGTH_LONG).show();
                     }
-                }, throwable -> Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                }, throwable -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                });
+
 
         compositeDisposable.add(disposable);
     }
