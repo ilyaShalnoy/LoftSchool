@@ -1,4 +1,4 @@
-package com.example.loftmoney;
+package com.example.loftmoney.screens.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +10,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.loftmoney.LoftApp;
+import com.example.loftmoney.R;
 import com.example.loftmoney.cell.ItemModel;
 import com.example.loftmoney.cell.ItemsAdapter;
 import com.example.loftmoney.remote.MoneyRemoteItem;
-import com.example.loftmoney.remote.MoneyResponse;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +28,19 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class BudgetFragment extends Fragment {
 
     public static final int REQUEST_CODE = 0;
     public static final String ARG_POSITION = "position";
-
     private RecyclerView recyclerView;
     private final ItemsAdapter itemsAdapter = new ItemsAdapter();
     private List<ItemModel> moneyItemModels = new ArrayList<>();
     private int currentPosition;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private SwipeRefreshLayout swipeRefreshLayout;
+   // private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    protected SwipeRefreshLayout swipeRefreshLayout;
+    private MainViewModel mainViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +60,13 @@ public class BudgetFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler);
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(() -> loadItems());
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+               mainViewModel.loadIncomes(((LoftApp) getActivity().getApplication()).moneyApi , currentPosition);
+               swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         recyclerView.setAdapter(itemsAdapter);
 
@@ -69,18 +75,47 @@ public class BudgetFragment extends Fragment {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-
-        loadItems();
+        // loadItems();
+        configureViewModel();
 
         return view;
     }
 
     @Override
-    public void onDestroy() {
-        compositeDisposable.dispose();
-        super.onDestroy();
+    public void onResume() {
+        super.onResume();
+        mainViewModel.loadIncomes(((LoftApp) getActivity().getApplication()).moneyApi , currentPosition);
+        itemsAdapter.clearItems();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
+
+   // @Override
+    //public void onDestroy() {
+     //   compositeDisposable.dispose();
+     //   super.onDestroy();
+   // }
+
+    private void configureViewModel() {
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel.moneyItemsList.observe(this, itemsAdapter::setData);
+
+        mainViewModel.messageString.observe(this , message -> {
+            if (!message.equals("")) {
+                showToast(message);
+            }
+        });
+
+        mainViewModel.messageInt.observe(this, message -> {
+            if(message > 0) {
+                showToast((getString(message)));
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -97,8 +132,10 @@ public class BudgetFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+}
 
-    private void loadItems() {
+    /* private void loadItems() {
+
         String typeRequest;
         if (currentPosition == 0) {
             typeRequest = "expense";
@@ -107,7 +144,7 @@ public class BudgetFragment extends Fragment {
         }
 
 
-        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems(typeRequest)
+       Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems(typeRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(moneyResponse -> {
@@ -131,3 +168,5 @@ public class BudgetFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 }
+/
+     */

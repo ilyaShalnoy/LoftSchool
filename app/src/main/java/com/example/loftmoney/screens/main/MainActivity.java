@@ -1,4 +1,4 @@
-package com.example.loftmoney;
+package com.example.loftmoney.screens.main;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,8 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.loftmoney.AddItemActivity;
+import com.example.loftmoney.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
