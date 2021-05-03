@@ -6,7 +6,6 @@
     <string name="expenses">Expenses</string>
     <string name="income">Income</string>
     <string name="balance">Balance</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fill_fields">"Please fill all fields "</string>
     <string name="success_added">Income added successfully</string>

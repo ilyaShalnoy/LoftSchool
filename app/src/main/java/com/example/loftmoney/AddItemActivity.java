@@ -1,24 +1,21 @@
 package com.example.loftmoney;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.internal.TextWatcherAdapter;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class AddItemActivity extends AppCompatActivity {
@@ -26,17 +23,13 @@ public class AddItemActivity extends AppCompatActivity {
     private EditText NameEditText;
     private EditText PriceEditText;
     private Button addButton;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private String mPrice;
     private String mName;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        configureButton();
-    }
+    private String fragmentType;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,8 +72,25 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
-
         addButton =(Button) findViewById(R.id.btn_add);
+
+        Bundle indexBundle = getIntent().getExtras();
+        int currentPosition = indexBundle.getInt("activeFragmentIndex");
+        if (currentPosition == 0) {
+            fragmentType = "expense";
+        } else {
+            fragmentType = "income";
+        }
+
+        if (currentPosition == 0) {
+            NameEditText.setTextColor(getResources().getColor(R.color.priceColor));
+            PriceEditText.setTextColor(getResources().getColor(R.color.priceColor));
+            addButton.setTextColor(getResources().getColorStateList(R.color.add_button_text_color_selector_expense, null));
+        } else {
+            NameEditText.setTextColor(getResources().getColor(R.color.priceColor_2));
+            PriceEditText.setTextColor(getResources().getColor(R.color.priceColor_2));
+            addButton.setTextColor(getResources().getColorStateList(R.color.add_button_text_color_selector_income, null));
+        }
 
         configureButton();
     }
@@ -94,20 +104,15 @@ public class AddItemActivity extends AppCompatActivity {
 
     private void configureButton() {
         addButton.setOnClickListener(v -> {
-            if (NameEditText.getText().equals("") || PriceEditText.getText().equals("")) {
-                Toast.makeText(getApplicationContext(), getString(R.string.fill_fields), Toast.LENGTH_LONG);
-                return;
-            } else {
-                Intent intent = new Intent();
-                intent.putExtra("name", NameEditText.getText().toString());
-                intent.putExtra("price", PriceEditText.getText().toString());
-                setResult(RESULT_OK, intent);
+            if (!TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mPrice)) {
+                setResult(
+                        RESULT_OK,
+                        new Intent().putExtra("name", mName).putExtra("price", mPrice));
                 finish();
 
                 Disposable disposable = ((LoftApp) getApplication()).moneyApi.postMoney(
                         Integer.parseInt(PriceEditText.getText().toString()),
-                        NameEditText.getText().toString(),
-                        "income")
+                        NameEditText.getText().toString(), fragmentType)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(() -> {
@@ -116,8 +121,8 @@ public class AddItemActivity extends AppCompatActivity {
                         }, throwable -> Toast.makeText(getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show());
             }
         });
-    }
 
+    }
     public void checkEditTextHasText() {
         addButton.setEnabled(!TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mPrice));
     }

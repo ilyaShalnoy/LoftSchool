@@ -55,6 +55,6 @@
         android:paddingEnd="17dp"
         android:text="@string/add_button"
         android:enabled="false"
-        android:textColor="@color/add_button_text_color_selector"
+        android:textColor="@color/add_button_text_color_selector_expense"
         android:textSize="14sp" />
 </RelativeLayout>

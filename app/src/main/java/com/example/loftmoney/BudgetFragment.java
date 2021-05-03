@@ -60,12 +60,7 @@ public class BudgetFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler);
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadItems();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> loadItems());
 
         recyclerView.setAdapter(itemsAdapter);
 
@@ -93,7 +88,6 @@ public class BudgetFragment extends Fragment {
         String priceAdd = data.getStringExtra("price");
 
         moneyItemModels.add(new ItemModel(nameAdd, priceAdd, currentPosition));
-        itemsAdapter.setData(moneyItemModels);
     }
 
     public static BudgetFragment newInstance(int position) {
@@ -105,15 +99,24 @@ public class BudgetFragment extends Fragment {
     }
 
     private void loadItems() {
-        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems("income")
+        String typeRequest;
+        if (currentPosition == 0) {
+            typeRequest = "expense";
+        } else {
+            typeRequest = "income";
+        }
+
+
+        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems(typeRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(moneyResponse -> {
                     itemsAdapter.clearItems();
                     swipeRefreshLayout.setRefreshing(false);
                     if (moneyResponse.getStatus().equals("success")) {
+                        List<ItemModel> moneyItemModels = new ArrayList<>();
                         for (MoneyRemoteItem moneyRemoteItem : moneyResponse.getMoneyItemsList()) {
-                            moneyItemModels.add(ItemModel.getInstance(moneyRemoteItem));
+                            moneyItemModels.add(new ItemModel(moneyRemoteItem.getName(), moneyRemoteItem.getPrice(), currentPosition));
                         }
                         itemsAdapter.setData(moneyItemModels);
                     } else {

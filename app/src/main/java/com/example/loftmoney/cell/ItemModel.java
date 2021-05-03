@@ -13,10 +13,6 @@ public class ItemModel {
         this.position = position;
     }
 
-    public ItemModel(String name, String price) {
-        this.name = name;
-        this.price = price;
-    }
 
     public String getName() {
         return name;
@@ -27,10 +23,6 @@ public class ItemModel {
     }
 
     public int getPosition() { return position; }
-
-    public static ItemModel getInstance (MoneyRemoteItem moneyRemoteItem) {
-        return new ItemModel(moneyRemoteItem.getName(), moneyRemoteItem.getPrice());
-    }
 
 }
 
