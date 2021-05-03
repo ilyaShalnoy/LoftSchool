@@ -48,6 +48,7 @@ public class BudgetFragment extends Fragment {
 
         if (getArguments() != null) {
             currentPosition = getArguments().getInt(ARG_POSITION);
+
         }
     }
 
@@ -63,7 +64,7 @@ public class BudgetFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               mainViewModel.loadIncomes(((LoftApp) getActivity().getApplication()).moneyApi , currentPosition);
+               mainViewModel.loadIncomes(((LoftApp) getActivity().getApplication()).moneyApi , currentPosition,getActivity().getSharedPreferences(getString(R.string.app_name), 0));
                swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -84,7 +85,7 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mainViewModel.loadIncomes(((LoftApp) getActivity().getApplication()).moneyApi , currentPosition);
+        mainViewModel.loadIncomes(((LoftApp) getActivity().getApplication()).moneyApi , currentPosition, getActivity().getSharedPreferences(getString(R.string.app_name), 0));
         itemsAdapter.clearItems();
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -111,6 +112,7 @@ public class BudgetFragment extends Fragment {
                 showToast((getString(message)));
             }
         });
+
     }
 
     private void showToast(String message) {
@@ -168,5 +170,4 @@ public class BudgetFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 }
-/
      */

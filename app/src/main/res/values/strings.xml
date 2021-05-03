@@ -10,5 +10,10 @@
     <string name="fill_fields">"Please fill all fields "</string>
     <string name="success_added">Income added successfully</string>
     <string name="connection_lost">Sorry, we cant load money list.</string>
-    <string name="activity_main_toolbar_title">Your budget</string>/>
+    <string name="activity_main_toolbar_title">Your budget</string>
+    <string name="action_login">Sign in</string>/>
+    
+    
+    <string name="client_id">1075141071257-6rjej2bo2tje9ou8prnosgb4o6881e5k.apps.googleusercontent.com</string>
+    <string name="client_secret">NqO9PVvbPOhXhCfaaIbqtsiK</string>
 </resources>

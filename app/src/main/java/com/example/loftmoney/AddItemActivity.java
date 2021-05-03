@@ -112,7 +112,8 @@ public class AddItemActivity extends AppCompatActivity {
 
                 Disposable disposable = ((LoftApp) getApplication()).moneyApi.postMoney(
                         Integer.parseInt(PriceEditText.getText().toString()),
-                        NameEditText.getText().toString(), fragmentType)
+                        NameEditText.getText().toString(), fragmentType,
+                        getSharedPreferences(getString(R.string.app_name), 0).getString(LoftApp.AUTH_KEY, ""))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(() -> {

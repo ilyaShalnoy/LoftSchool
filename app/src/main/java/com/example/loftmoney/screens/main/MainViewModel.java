@@ -1,12 +1,12 @@
 package com.example.loftmoney.screens.main;
 
+import android.content.SharedPreferences;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.loftmoney.R;
+import com.example.loftmoney.LoftApp;
 import com.example.loftmoney.cell.ItemModel;
-import com.example.loftmoney.cell.ItemsAdapter;
 import com.example.loftmoney.remote.MoneyApi;
 import com.example.loftmoney.remote.MoneyRemoteItem;
 
@@ -32,7 +32,8 @@ public class MainViewModel extends ViewModel {
         super.onCleared();
     }
 
-    public void loadIncomes(MoneyApi moneyApi, int currentPosition) {
+    public void loadIncomes(MoneyApi moneyApi, int currentPosition, SharedPreferences sharedPreferences) {
+        String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
 
         String typeRequest;
         if (currentPosition == 0) {
@@ -41,13 +42,13 @@ public class MainViewModel extends ViewModel {
             typeRequest = "income";
         }
 
-        compositeDisposable.add(moneyApi.getMoneyItems(typeRequest)
+        compositeDisposable.add(moneyApi.getMoneyItems(typeRequest, authToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(moneyResponse -> {
+                .subscribe(moneyRemoteItems -> {
                         List<ItemModel> moneyItemModels = new ArrayList<>();
 
-                        for (MoneyRemoteItem moneyRemoteItem : moneyResponse.getMoneyItemsList()) {
+                        for (MoneyRemoteItem moneyRemoteItem : moneyRemoteItems) {
                             moneyItemModels.add(new ItemModel(moneyRemoteItem.getName(), moneyRemoteItem.getPrice(), currentPosition));
                         }
                         moneyItemsList.postValue(moneyItemModels);
