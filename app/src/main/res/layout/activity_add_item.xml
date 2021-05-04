@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".screens.main.MainActivity">
 
 
     <LinearLayout
@@ -16,31 +16,29 @@
         android:paddingStart="33dp"
         android:paddingEnd="104dp">
 
-        <EditText
-            android:id="@+id/et_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/Price"
-            android:layout_marginBottom="25dp"
-            android:backgroundTint="#1e000000"
-            android:fontFamily="sans-serif"
-            android:hint="@string/name_hint"
-            android:paddingTop="6dp"
-            android:paddingBottom="18dp"
-            android:textColorHint="#dbdbdb"
-            android:textSize="24sp" />
 
-        <EditText
-            android:id="@+id/et_price"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#1e000000"
-            android:fontFamily="sans-serif"
-            android:hint="@string/price_hint"
-            android:paddingTop="6dp"
-            android:paddingBottom="18dp"
-            android:textColorHint="#dbdbdb"
-            android:textSize="24sp" />
+            android:layout_height="match_parent"
+            android:hint="@string/name_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/price_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
     <Button
@@ -50,12 +48,13 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
-        android:drawableLeft="@drawable/ic_baseline_check_24"
+        android:drawableLeft="@drawable/check_selector"
         android:fontFamily="sans-serif-medium"
         android:letterSpacing="0.04"
         android:paddingStart="40dp"
         android:paddingEnd="17dp"
         android:text="@string/add_button"
-        android:textColor="#eaeaea"
+        android:enabled="false"
+        android:textColor="@color/add_button_text_color_selector_expense"
         android:textSize="14sp" />
 </RelativeLayout>
