@@ -20,15 +20,9 @@ import com.example.loftmoney.LoftApp;
 import com.example.loftmoney.R;
 import com.example.loftmoney.cell.ItemModel;
 import com.example.loftmoney.cell.ItemsAdapter;
-import com.example.loftmoney.remote.MoneyRemoteItem;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class BudgetFragment extends Fragment {
 
@@ -38,7 +32,6 @@ public class BudgetFragment extends Fragment {
     private final ItemsAdapter itemsAdapter = new ItemsAdapter();
     private List<ItemModel> moneyItemModels = new ArrayList<>();
     private int currentPosition;
-   // private CompositeDisposable compositeDisposable = new CompositeDisposable();
     protected SwipeRefreshLayout swipeRefreshLayout;
     private MainViewModel mainViewModel;
 
@@ -76,7 +69,8 @@ public class BudgetFragment extends Fragment {
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        // loadItems();
+
+
         configureViewModel();
 
         return view;
@@ -89,13 +83,6 @@ public class BudgetFragment extends Fragment {
         itemsAdapter.clearItems();
         swipeRefreshLayout.setRefreshing(false);
     }
-
-
-   // @Override
-    //public void onDestroy() {
-     //   compositeDisposable.dispose();
-     //   super.onDestroy();
-   // }
 
     private void configureViewModel() {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -136,38 +123,3 @@ public class BudgetFragment extends Fragment {
     }
 }
 
-    /* private void loadItems() {
-
-        String typeRequest;
-        if (currentPosition == 0) {
-            typeRequest = "expense";
-        } else {
-            typeRequest = "income";
-        }
-
-
-       Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems(typeRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(moneyResponse -> {
-                    itemsAdapter.clearItems();
-                    swipeRefreshLayout.setRefreshing(false);
-                    if (moneyResponse.getStatus().equals("success")) {
-                        List<ItemModel> moneyItemModels = new ArrayList<>();
-                        for (MoneyRemoteItem moneyRemoteItem : moneyResponse.getMoneyItemsList()) {
-                            moneyItemModels.add(new ItemModel(moneyRemoteItem.getName(), moneyRemoteItem.getPrice(), currentPosition));
-                        }
-                        itemsAdapter.setData(moneyItemModels);
-                    } else {
-                        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.connection_lost), Toast.LENGTH_LONG).show();
-                    }
-                }, throwable -> {
-                    swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                });
-
-
-        compositeDisposable.add(disposable);
-    }
-}
-     */
