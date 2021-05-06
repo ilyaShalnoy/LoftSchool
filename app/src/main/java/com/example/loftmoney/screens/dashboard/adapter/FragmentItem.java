@@ -2,8 +2,6 @@ package com.example.loftmoney.screens.dashboard.adapter;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.loftmoney.screens.money.MoneyFragment;
-
 public class FragmentItem {
     private Fragment fragment;
     private String title;

@@ -14,8 +14,9 @@ import android.widget.FrameLayout;
 import com.example.loftmoney.AddItemActivity;
 import com.example.loftmoney.R;
 import com.example.loftmoney.screens.dashboard.DashboardFragment;
+import com.example.loftmoney.screens.money.BudgetFragment;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,27 +36,29 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.container_view, new DashboardFragment())
                 .commitNow();
 
-       // TabLayout tabLayout = findViewById(R.id.tabs);
-        //ViewPager viewPager = findViewById(R.id.viewpager);
+        // TabLayout tabLayout = findViewById(R.id.tabs);
+        //ViewPager viewPager = findViewById(R.id.view_pager);
 
-        /*viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
+       /* viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
 
         FloatingActionButton floatingActionButton = findViewById(R.id.add_new_expense);
         floatingActionButton.setOnClickListener(v -> {
-            final int activeFragmentIndex = viewPager.getCurrentItem();
+
+            final int activeFragmentIndex =viewPager.getCurrentItem();
             Fragment activeFragment = getSupportFragmentManager().getFragments().get(activeFragmentIndex);
             Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
             intent.putExtra("activeFragmentIndex", activeFragmentIndex);
             activeFragment.startActivityForResult(intent, BudgetFragment.REQUEST_CODE);
         });
 
-        tabLayout.setupWithViewPager(viewPager);
+        /* tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setText(R.string.expenses);
         tabLayout.getTabAt(1).setText(R.string.incomes); */
 
     }
+}
 
-    static class BudgetPagerAdapter extends FragmentPagerAdapter {
+  /*  static class BudgetPagerAdapter extends FragmentPagerAdapter {
 
         public BudgetPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);
@@ -75,4 +78,4 @@ public class MainActivity extends AppCompatActivity {
             return 2;
         }
     }
-}
+}   */

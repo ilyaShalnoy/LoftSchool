@@ -8,5 +8,6 @@
     <string name="expenses">Расходы</string>
     <string name="incomes">Доходы</string>
     <string name="balance">Баланс</string>/>
-    <string name="toolbar_title">Учет бюджета</string>/>
+    <string name="toolbar_title">Учет бюджета</string>
+    <string name="selected">Выделено: </string>/>
 </resources>
