@@ -1,6 +1,7 @@
 package com.example.loftmoney.screens.dashboard;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -24,13 +25,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.loftmoney.AddItemActivity;
+import com.example.loftmoney.LoftApp;
 import com.example.loftmoney.R;
 import com.example.loftmoney.screens.balance.BalanceFragment;
 import com.example.loftmoney.screens.dashboard.adapter.FragmentAdapter;
 import com.example.loftmoney.screens.dashboard.adapter.FragmentItem;
 import com.example.loftmoney.screens.main.MainActivity;
+import com.example.loftmoney.screens.main.MainViewModel;
 import com.example.loftmoney.screens.money.BudgetEditListener;
 import com.example.loftmoney.screens.money.BudgetFragment;
+import com.example.loftmoney.screens.money.BudgetViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -45,6 +49,7 @@ public class DashboardFragment extends Fragment implements EditModeListener {
     private TabLayout tabView;
     private TextView dashboardTitleView;
     private ViewPager viewPager;
+    private BudgetViewModel budgetViewModel;
 
 
     @Nullable
@@ -58,8 +63,8 @@ public class DashboardFragment extends Fragment implements EditModeListener {
         super.onViewCreated(view, savedInstanceState);
 
         List<FragmentItem> fragments = new ArrayList<>();
-        fragments.add(new FragmentItem(new BudgetFragment(), getString(R.string.expenses)));
-        fragments.add(new FragmentItem(new BudgetFragment(), getString(R.string.incomes)));
+        fragments.add(new FragmentItem(BudgetFragment.newInstance(0), getString(R.string.expenses)));
+        fragments.add(new FragmentItem(BudgetFragment.newInstance(1), getString(R.string.incomes)));
         fragments.add(new FragmentItem(new BalanceFragment(), getString(R.string.balance)));
 
         toolbarView = view.findViewById(R.id.toolbar_view);
@@ -73,6 +78,7 @@ public class DashboardFragment extends Fragment implements EditModeListener {
                 clearEditStatus();
             }
         });
+
 
         dashboardActionView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +95,7 @@ public class DashboardFragment extends Fragment implements EditModeListener {
                         .setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                clearSelectedItems();
+                                clearSelectedItems();     //TODO: Как реализовать удаление?
                             }
                         })
                         .show();
@@ -113,6 +119,7 @@ public class DashboardFragment extends Fragment implements EditModeListener {
 
             }
         });
+
         tabView = view.findViewById(R.id.tab_view);
 
         FragmentAdapter fragmentAdapter = new FragmentAdapter(fragments, getChildFragmentManager(), 0);
@@ -120,30 +127,11 @@ public class DashboardFragment extends Fragment implements EditModeListener {
         viewPager.setOffscreenPageLimit(3);
         tabView.setupWithViewPager(viewPager);
 
-        //viewPager.setAdapter(new BudgetPagerAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
-
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.add_new_item);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final int activeFragmentIndex = viewPager.getCurrentItem();
-                Fragment activeFragment = getActivity().getSupportFragmentManager().getFragments().get(activeFragmentIndex);
-                Intent intent = new Intent(getActivity(), AddItemActivity.class);
-                intent.putExtra("activeFragmentIndex", activeFragmentIndex);
-                activeFragment.startActivityForResult(intent,
-                        BudgetFragment.REQUEST_CODE);
-            }
-        });
-
-      /*  tabView.setupWithViewPager(viewPager);
-        tabView.getTabAt(0).setText(R.string.expenses);
-        tabView.getTabAt(1).setText(R.string.incomes); */
     }
 
 
     @Override
     public void onEditModeChanged(boolean status) {
-        // тернарник
         toolbarView.setBackgroundColor(ContextCompat.getColor(getContext(), status ? R.color.selectionColorPrimary : R.color.colorPrimary));
         dashboardActionView.setVisibility(status ? View.VISIBLE : View.GONE);
         backButtonView.setVisibility(status ? View.VISIBLE : View.INVISIBLE);
@@ -181,23 +169,4 @@ public class DashboardFragment extends Fragment implements EditModeListener {
     }
 }
 
-    class BudgetPagerAdapter extends FragmentPagerAdapter {
 
-        public BudgetPagerAdapter(@NonNull FragmentManager fm, int behavior) {
-            super(fm, behavior);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            if (position < 2) {
-                return BudgetFragment.newInstance(position);
-            } else
-                return null;
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-    }

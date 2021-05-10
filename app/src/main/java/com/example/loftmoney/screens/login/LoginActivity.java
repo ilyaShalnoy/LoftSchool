@@ -27,15 +27,18 @@ public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private GoogleSignInClient mGoogleSignInClient;
     private final int RC_SIGN_IN = 111;
+    private AppCompatButton loginEnterView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        loginEnterView = findViewById(R.id.login_enter_view);
+        loginEnterView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_google), null, null,null);
 
+        configureGoogleAuth();
         configureView();
         configureViewModel();
-        configureGoogleAuth();
     }
 
     private void configureGoogleAuth() {
@@ -76,10 +79,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void configureView() {
-        AppCompatButton loginEnterView = findViewById(R.id.login_enter_view);
+
 
         loginEnterView.setOnClickListener(v -> {
-    //        loginViewModel.makeLogin(((LoftApp) getApplication()).authApi);
+           //loginViewModel.makeLogin(((LoftApp) getApplication()).authApi);
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
         });
@@ -102,6 +105,8 @@ public class LoginActivity extends AppCompatActivity {
 
                   Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                   startActivity(intent);
+                  //Анимация alpha на окно авторизации.
+                  overridePendingTransition(R.anim.alpha_in,R.anim.alpha_out);
                   finish();
                 }
             });

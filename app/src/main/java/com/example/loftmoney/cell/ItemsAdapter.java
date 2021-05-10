@@ -1,7 +1,6 @@
 package com.example.loftmoney.cell;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,7 +95,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             super(itemView);
 
             this.itemsAdapterClick = itemsAdapterClick;
-
             name = itemView.findViewById(R.id.tv_name_expenses);
             price = itemView.findViewById(R.id.tv_price_expenses);
 

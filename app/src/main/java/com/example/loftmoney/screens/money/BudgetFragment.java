@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.loftmoney.AddItemActivity;
 import com.example.loftmoney.LoftApp;
 import com.example.loftmoney.R;
 import com.example.loftmoney.cell.ItemModel;
@@ -25,13 +25,12 @@ import com.example.loftmoney.cell.ItemsAdapterClick;
 import com.example.loftmoney.screens.dashboard.EditModeListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class BudgetFragment extends Fragment implements BudgetEditListener {
 
-    public static final int REQUEST_CODE = 0;
+
     public static final String ARG_POSITION = "position";
     private RecyclerView recyclerView;
     private final ItemsAdapter itemsAdapter = new ItemsAdapter();
@@ -39,7 +38,7 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
     private int currentPosition;
     protected SwipeRefreshLayout swipeRefreshLayout;
     private BudgetViewModel budgetViewModel;
-    public FloatingActionButton addNewItem;
+    private FloatingActionButton addNewItem;
 
 
     @Override
@@ -56,6 +55,7 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
                 if (budgetViewModel.isEditMode.getValue()) {
                     itemModel.setSelected(!itemModel.isSelected());
                     itemsAdapter.updateItem(itemModel);
+                    budgetViewModel.selectItem(itemModel);
                     checkSelectedCount();
                 }
 
@@ -67,6 +67,7 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
                     itemModel.setSelected(true);
                 itemsAdapter.updateItem(itemModel);
                 budgetViewModel.isEditMode.postValue(true);
+                budgetViewModel.selectItem(itemModel);
                 checkSelectedCount();
             }
         });
@@ -86,10 +87,10 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        addNewItem = view.findViewById(R.id.add_new_item);
 
-        configureViewModel();
         configureView(view);
+        configureViewModel();
+
 
     }
 
@@ -113,15 +114,28 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+        addNewItem = view.findViewById(R.id.add_new_item);
+        addNewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AddItemActivity.class);
+                intent.putExtra(ARG_POSITION, currentPosition);
+                startActivity(intent);
+            }
+        });
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
+        onLoadData();
+    }
+
+    private void onLoadData() {
         budgetViewModel.loadIncomes(((LoftApp) getActivity().getApplication()).moneyApi, currentPosition, getActivity().getSharedPreferences(getString(R.string.app_name), 0));
         itemsAdapter.clearItems();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void configureViewModel() {
@@ -129,8 +143,8 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
         budgetViewModel.moneyItemsList.observe(this, itemsAdapter::setData);
 
         budgetViewModel.isEditMode.observe(this, isEditMode -> {
-            //TODO : ошибка после этого, реализация пропадания fab после long click.
-            //addNewItem.setVisibility(isEditMode ? View.GONE : View.VISIBLE);
+
+            addNewItem.setVisibility(isEditMode ? View.GONE : View.VISIBLE);
 
             Fragment parentFragment = getParentFragment();
             if (parentFragment instanceof EditModeListener) {
@@ -155,6 +169,12 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
         budgetViewModel.messageInt.observe(this, message -> {
             if (message > 0) {
                 showToast((getString(message)));
+            }
+        });
+
+        budgetViewModel.isNeedLoadData.observe(this, isNeed -> {
+            if (isNeed) {
+                onLoadData();
             }
         });
 
@@ -187,24 +207,19 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
     public void onClearSelectedClick() {
         budgetViewModel.isEditMode.postValue(false);
         budgetViewModel.selectedCounter.postValue(-1);
-        itemsAdapter.deleteSelectedItems();
-            }
+        //      itemsAdapter.deleteSelectedItems();
 
+        budgetViewModel.removeItems(((LoftApp) getActivity().getApplication()).moneyApi,
+                getActivity().getSharedPreferences(getString(R.string.app_name), 0), budgetViewModel.selectedItems);
+
+        onLoadData();
+    }
 
 
     private void showToast(String message) {
         Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        String nameAdd = data.getStringExtra("name");
-        String priceAdd = data.getStringExtra("price");
-
-        moneyItemModels.add(new ItemModel(nameAdd, priceAdd, currentPosition));
-    }
 
     public static BudgetFragment newInstance(int position) {
         BudgetFragment fragment = new BudgetFragment();

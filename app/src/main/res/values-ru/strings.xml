@@ -10,4 +10,5 @@
     <string name="balance">Баланс</string>/>
     <string name="toolbar_title">Учет бюджета</string>
     <string name="selected">Выделено: </string>/>
+    <string name="success_added">Добавление прошло успешно</string>
 </resources>

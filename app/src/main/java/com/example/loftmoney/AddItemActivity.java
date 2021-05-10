@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.loftmoney.screens.money.BudgetFragment;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -24,18 +26,23 @@ public class AddItemActivity extends AppCompatActivity {
     private EditText PriceEditText;
     private Button addButton;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private String fragmentType;
+
     private String mPrice;
     private String mName;
-    private String fragmentType;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    protected void onCreate( Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
-        NameEditText = (EditText) findViewById(R.id.et_name);
+        NameEditText = findViewById(R.id.et_name);
+        addButton = findViewById(R.id.btn_add);
+        PriceEditText = findViewById(R.id.et_price);
+
+
         NameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -53,7 +60,7 @@ public class AddItemActivity extends AppCompatActivity {
                 checkEditTextHasText();
             }
         });
-        PriceEditText = (EditText) findViewById(R.id.et_price);
+
         PriceEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -72,24 +79,26 @@ public class AddItemActivity extends AppCompatActivity {
             }
         });
 
-        addButton =(Button) findViewById(R.id.btn_add);
-
         Bundle indexBundle = getIntent().getExtras();
-        int currentPosition = indexBundle.getInt("activeFragmentIndex");
+        int currentPosition = indexBundle.getInt(BudgetFragment.ARG_POSITION);
         if (currentPosition == 0) {
             fragmentType = "expense";
-        } else {
+        } else if (currentPosition == 1) {
             fragmentType = "income";
         }
+
 
         if (currentPosition == 0) {
             NameEditText.setTextColor(getResources().getColor(R.color.priceColor));
             PriceEditText.setTextColor(getResources().getColor(R.color.priceColor));
             addButton.setTextColor(getResources().getColorStateList(R.color.add_button_text_color_selector_expense, null));
-        } else {
+            addButton.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.check_selector_expense), null, null, null);
+
+        } else if (currentPosition == 1) {
             NameEditText.setTextColor(getResources().getColor(R.color.priceColor_2));
             PriceEditText.setTextColor(getResources().getColor(R.color.priceColor_2));
             addButton.setTextColor(getResources().getColorStateList(R.color.add_button_text_color_selector_income, null));
+            addButton.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.check_selector), null, null, null);
         }
 
         configureButton();
@@ -110,7 +119,7 @@ public class AddItemActivity extends AppCompatActivity {
                         new Intent().putExtra("name", mName).putExtra("price", mPrice));
                 finish();
 
-                Disposable disposable = ((LoftApp) getApplication()).moneyApi.postMoney(
+                compositeDisposable.add(((LoftApp) getApplication()).moneyApi.postMoney(
                         Integer.parseInt(PriceEditText.getText().toString()),
                         NameEditText.getText().toString(), fragmentType,
                         getSharedPreferences(getString(R.string.app_name), 0).getString(LoftApp.AUTH_KEY, ""))
@@ -119,11 +128,12 @@ public class AddItemActivity extends AppCompatActivity {
                         .subscribe(() -> {
                             Toast.makeText(getApplicationContext(), getString(R.string.success_added), Toast.LENGTH_LONG).show();
                             finish();
-                        }, throwable -> Toast.makeText(getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show());
+                        }, throwable -> Toast.makeText(getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show()));
             }
         });
 
     }
+
     public void checkEditTextHasText() {
         addButton.setEnabled(!TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mPrice));
     }
