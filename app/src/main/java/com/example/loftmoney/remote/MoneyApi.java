@@ -23,4 +23,6 @@ public interface MoneyApi {
     @POST("items/remove")
     Single<AuthResponse> removeItem (@Query("id") String id, @Query("auth-token") String authToken);
 
+    @GET("balance")
+    Single<BalanceResponse> getBalance (@Query("auth-token") String authToken);
 }

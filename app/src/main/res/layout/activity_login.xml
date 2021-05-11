@@ -26,6 +26,7 @@
         android:textAllCaps="false"
         android:textColor="@color/colorPrimary"
         android:layout_marginTop="37dp"
+        android:drawableLeft="@drawable/ic_google"
         android:text="@string/action_login"
         android:background="@drawable/button_default_background"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

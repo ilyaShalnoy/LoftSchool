@@ -21,5 +21,8 @@
     <string name="delete_items_message">Remove selected items exactly?</string>
     <string name="action_no">No</string>
     <string name="action_yes">Yes</string>
+    <string name="balance_finance_title">Available finance</string>
+    <string name="income">Income</string>
+    <string name="expense">Expense</string>
 
 </resources>
