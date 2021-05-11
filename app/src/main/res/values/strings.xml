@@ -4,16 +4,22 @@
     <string name="price_hint">Price</string>
     <string name="add_button">ADD</string>
     <string name="expenses">Expenses</string>
-    <string name="income">Income</string>
+    <string name="incomes">Incomes</string>
     <string name="balance">Balance</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fill_fields">"Please fill all fields "</string>
-    <string name="success_added">Income added successfully</string>
+    <string name="success_added">Item added successfully</string>
     <string name="connection_lost">Sorry, we cant load money list.</string>
-    <string name="activity_main_toolbar_title">Your budget</string>
+    <string name="toolbar_title">Your budget</string>
     <string name="action_login">Sign in</string>/>
+    <string name="selected">Allocated: </string>
     
     
     <string name="client_id">1075141071257-6rjej2bo2tje9ou8prnosgb4o6881e5k.apps.googleusercontent.com</string>
     <string name="client_secret">NqO9PVvbPOhXhCfaaIbqtsiK</string>
+    <string name="delete_items_title">Delete?</string>
+    <string name="delete_items_message">Remove selected items exactly?</string>
+    <string name="action_no">No</string>
+    <string name="action_yes">Yes</string>
+
 </resources>

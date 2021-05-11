@@ -26,7 +26,10 @@ public class MainViewModel extends ViewModel {
     public MutableLiveData<Integer> messageInt = new MutableLiveData<>(-1);
 
 
-    @Override
+
+
+
+  /*  @Override
     protected void onCleared() {
         compositeDisposable.dispose();
         super.onCleared();
@@ -55,5 +58,6 @@ public class MainViewModel extends ViewModel {
                 }, throwable -> {
                     messageString.postValue(throwable.getLocalizedMessage());
                 }));
-    }
+    } */
+
 }

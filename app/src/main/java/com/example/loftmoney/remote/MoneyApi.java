@@ -19,4 +19,8 @@ public interface MoneyApi {
     @FormUrlEncoded
     Completable postMoney(@Field("price") int price, @Field("name") String name,
                           @Field("type") String type, @Field("auth-token") String authToken);
+
+    @POST("items/remove")
+    Single<AuthResponse> removeItem (@Query("id") String id, @Query("auth-token") String authToken);
+
 }
