@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 public interface MoneyApi {
 
     @GET("./items")
-    Single<List<MoneyRemoteItem>> getMoneyItems (@Query("type") String type, @Query("auth-token") String authToken);
+    Single<List<MoneyRemoteItem>> getMoneyItems(@Query("type") String type, @Query("auth-token") String authToken);
 
     @POST("./items/add")
     @FormUrlEncoded
@@ -21,8 +21,8 @@ public interface MoneyApi {
                           @Field("type") String type, @Field("auth-token") String authToken);
 
     @POST("items/remove")
-    Single<AuthResponse> removeItem (@Query("id") String id, @Query("auth-token") String authToken);
+    Single<AuthResponse> removeItem(@Query("id") String id, @Query("auth-token") String authToken);
 
     @GET("balance")
-    Single<BalanceResponse> getBalance (@Query("auth-token") String authToken);
+    Single<BalanceResponse> getBalance(@Query("auth-token") String authToken);
 }

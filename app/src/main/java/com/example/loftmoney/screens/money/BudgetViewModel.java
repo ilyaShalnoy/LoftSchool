@@ -7,11 +7,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.loftmoney.LoftApp;
-import com.example.loftmoney.cell.ItemModel;
+import com.example.loftmoney.cells.ItemModel;
 import com.example.loftmoney.remote.MoneyApi;
 import com.example.loftmoney.remote.MoneyRemoteItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -32,6 +34,7 @@ public class BudgetViewModel extends ViewModel {
     public List<ItemModel> selectedItems = new ArrayList<>();
 
     private String typeRequest;
+    private BudgetFragment budgetFragment = new BudgetFragment();
 
     public void selectItem(ItemModel item) {
         selectedItems.add(item);
@@ -63,6 +66,8 @@ public class BudgetViewModel extends ViewModel {
                     for (MoneyRemoteItem moneyRemoteItem : moneyRemoteItems) {
                         moneyItemModels.add(new ItemModel(moneyRemoteItem.getItemId(), moneyRemoteItem.getName(), moneyRemoteItem.getPrice(), currentPosition));
                     }
+
+                    budgetFragment.sortItems(moneyItemModels);
                     moneyItemsList.postValue(moneyItemModels);
                 }, throwable -> {
                     messageString.postValue(throwable.getLocalizedMessage());
@@ -93,7 +98,6 @@ public class BudgetViewModel extends ViewModel {
                         messageString.postValue(throwable.getLocalizedMessage());
                     }));
         }
-
-
     }
+
 }

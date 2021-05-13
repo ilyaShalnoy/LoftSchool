@@ -42,6 +42,9 @@ public class LoftApp extends Application {
 
         moneyApi = retrofit.create(MoneyApi.class);
         authApi = retrofit.create(AuthApi.class);
+    }
 
+    public MoneyApi getMoneyApi() {
+        return moneyApi;
     }
 }

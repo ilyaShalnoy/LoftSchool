@@ -110,7 +110,6 @@ public class AddItemActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
     private void configureButton() {
         addButton.setOnClickListener(v -> {
             if (!TextUtils.isEmpty(mName) && !TextUtils.isEmpty(mPrice)) {

@@ -19,13 +19,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.loftmoney.AddItemActivity;
 import com.example.loftmoney.LoftApp;
 import com.example.loftmoney.R;
-import com.example.loftmoney.cell.ItemModel;
-import com.example.loftmoney.cell.ItemsAdapter;
-import com.example.loftmoney.cell.ItemsAdapterClick;
+import com.example.loftmoney.cells.ItemModel;
+import com.example.loftmoney.cells.ItemsAdapter;
+import com.example.loftmoney.cells.ItemsAdapterClick;
+import com.example.loftmoney.screens.balance.BalanceFragment;
 import com.example.loftmoney.screens.dashboard.EditModeListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BudgetFragment extends Fragment implements BudgetEditListener {
@@ -58,7 +61,6 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
                     budgetViewModel.selectItem(itemModel);
                     checkSelectedCount();
                 }
-
             }
 
             @Override
@@ -87,27 +89,23 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         configureView(view);
         configureViewModel();
-
-
     }
 
     private void configureView(View view) {
 
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setAdapter(itemsAdapter);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
             @Override
             public void onRefresh() {
                 budgetViewModel.loadIncomes(((LoftApp) getActivity().getApplication()).moneyApi, currentPosition, getActivity().getSharedPreferences(getString(R.string.app_name), 0));
@@ -125,7 +123,6 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
             }
         });
     }
-
 
     @Override
     public void onResume() {
@@ -160,13 +157,13 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
         });
 
 
-        budgetViewModel.messageString.observe(this, message -> {
+        budgetViewModel.messageString.observe(this, message -> {   //TODO: ?
             if (!message.equals("")) {
                 showToast(message);
             }
         });
 
-        budgetViewModel.messageInt.observe(this, message -> {
+        budgetViewModel.messageInt.observe(this, message -> {   //TODO: ?
             if (message > 0) {
                 showToast((getString(message)));
             }
@@ -177,7 +174,6 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
                 onLoadData();
             }
         });
-
     }
 
     private void checkSelectedCount() {
@@ -191,7 +187,7 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
     }
 
     @Override
-    public void onClearEdit() {
+    public void onClearEdit() {  //отключаем режим EditMode.
         budgetViewModel.isEditMode.postValue(false);
         budgetViewModel.selectedCounter.postValue(-1);
 
@@ -205,18 +201,17 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
 
     @Override
     public void onClearSelectedClick() {
-        budgetViewModel.isEditMode.postValue(false);
+        budgetViewModel.isEditMode.postValue(false);  // возвращение из мода редактирования
         budgetViewModel.selectedCounter.postValue(-1);
-        //      itemsAdapter.deleteSelectedItems();
 
         budgetViewModel.removeItems(((LoftApp) getActivity().getApplication()).moneyApi,
-                getActivity().getSharedPreferences(getString(R.string.app_name), 0), budgetViewModel.selectedItems);
+                getActivity().getSharedPreferences(getString(R.string.app_name), 0),budgetViewModel.selectedItems);
 
         onLoadData();
     }
 
 
-    private void showToast(String message) {
+    private void showToast(String message) {    //TODO: ?
         Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
@@ -229,5 +224,13 @@ public class BudgetFragment extends Fragment implements BudgetEditListener {
         return fragment;
     }
 
+    public void sortItems(List<ItemModel> items) {
+        Collections.sort(items, new Comparator<ItemModel>() {
+            @Override
+            public int compare(ItemModel o1, ItemModel o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+    }
 }
 

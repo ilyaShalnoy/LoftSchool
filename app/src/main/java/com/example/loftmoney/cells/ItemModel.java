@@ -1,13 +1,11 @@
-package com.example.loftmoney.cell;
-
-import com.example.loftmoney.remote.MoneyRemoteItem;
+package com.example.loftmoney.cells;
 
 public class ItemModel {
     private String id;
     private String name;
     private String price;
     private int position;
-    private boolean isSelected;
+    private boolean isSelected; // для выделения ячейки
 
     public ItemModel(String id, String name, String price, int position) {
         this.id = id;
@@ -17,7 +15,9 @@ public class ItemModel {
         this.isSelected = false;
     }
 
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -27,7 +27,9 @@ public class ItemModel {
         return price;
     }
 
-    public int getPosition() { return position; }
+    public int getPosition() {
+        return position;
+    }
 
     public boolean isSelected() {
         return isSelected;

@@ -57,23 +57,26 @@ public class BalanceView extends View {
 
         float total = expenses + incomes;
 
-        float expenseAngle = 360f * expenses/ total;
-        float incomesAngle = 360f * incomes/ total;
+        float expenseAngle = 360f * expenses / total;
+        float incomesAngle = 360f * incomes / total;
 
         int space = 20;
         int size = Math.min(getWidth(), getHeight()) - space * 2;
         int xMargin = (getWidth() - size) / 2;
-        int yMargin = (getHeight() -size) / 2;
+        int yMargin = (getHeight() - size) / 2;
 
         canvas.drawArc(xMargin - space, yMargin,
-                getWidth() - xMargin -space,
+                getWidth() - xMargin - space,
                 getHeight() - yMargin, (180 - expenseAngle / 2),
-                expenseAngle, true, expensePaint);
+                expenseAngle,
+                true, expensePaint);
 
-        canvas.drawArc(xMargin +space, yMargin,
-                getWidth()-xMargin+space,
-                getHeight() - yMargin, 360 - incomesAngle/2,
-                incomesAngle,true, incomePaint);
+        canvas.drawArc(xMargin + space, yMargin,
+                getWidth() - xMargin + space,
+                getHeight() - yMargin,
+                360 - incomesAngle / 2,
+                incomesAngle,
+                true, incomePaint);
 
     }
 }

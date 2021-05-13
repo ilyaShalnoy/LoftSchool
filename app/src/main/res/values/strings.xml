@@ -6,12 +6,10 @@
     <string name="expenses">Expenses</string>
     <string name="incomes">Incomes</string>
     <string name="balance">Balance</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="fill_fields">"Please fill all fields "</string>
     <string name="success_added">Item added successfully</string>
     <string name="connection_lost">Sorry, we cant load money list.</string>
     <string name="toolbar_title">Your budget</string>
-    <string name="action_login">Sign in</string>/>
+    <string name="action_login"> Sign in</string>/>
     <string name="selected">Allocated: </string>
     
     

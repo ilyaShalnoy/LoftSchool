@@ -1,4 +1,4 @@
-package com.example.loftmoney.cell;
+package com.example.loftmoney.cells;
 
 import android.content.Context;
 import android.text.SpannableString;
@@ -19,6 +19,8 @@ import java.util.List;
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     private List<ItemModel> moneyItemModelList = new ArrayList<>();
+    public List<ItemModel> selectedItems = new ArrayList<>();
+
 
     public ItemsAdapterClick itemsAdapterClick;
 
@@ -43,23 +45,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         notifyItemChanged(itemPosition);
     }
 
-
     public void setItemsAdapterClick(ItemsAdapterClick itemsAdapterClick) {
         this.itemsAdapterClick = itemsAdapterClick;
     }
 
-
-    public void deleteSelectedItems() {
-        List<ItemModel> selectedItems = new ArrayList<>();
-        for (ItemModel itemModel : moneyItemModelList) {
-            if(itemModel.isSelected()) {
-                selectedItems.add(itemModel);
-            }
-        }
-
-        moneyItemModelList.removeAll(selectedItems);
-        notifyDataSetChanged();
-    }
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -84,23 +73,23 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         return moneyItemModelList.size();
     }
 
-
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private TextView name;
         private TextView price;
-        private  ItemsAdapterClick itemsAdapterClick;
+        private ItemsAdapterClick itemsAdapterClick;
 
         public ItemViewHolder(@NonNull View itemView, ItemsAdapterClick itemsAdapterClick) {
             super(itemView);
 
             this.itemsAdapterClick = itemsAdapterClick;
+
             name = itemView.findViewById(R.id.tv_name_expenses);
             price = itemView.findViewById(R.id.tv_price_expenses);
-
         }
 
         public void bind(final ItemModel itemModel) {
+
             name.setText(itemModel.getName());
             price.setText(new SpannableString(itemModel.getPrice() + " \u20BD"));
             if (itemModel.getPosition() == 0) {
@@ -114,7 +103,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (itemsAdapterClick != null){
+                    if (itemsAdapterClick != null) {
                         itemsAdapterClick.onCellClick(itemModel);
                     }
                 }
