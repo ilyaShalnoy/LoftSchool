@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">LoftMoney</string>
     <string name="name_hint">Name</string>
     <string name="price_hint">Price</string>
     <string name="add_button">ADD</string>
@@ -11,8 +10,7 @@
     <string name="toolbar_title">Your budget</string>
     <string name="action_login"> Sign in</string>/>
     <string name="selected">Allocated: </string>
-    
-    
+
     <string name="client_id">1075141071257-6rjej2bo2tje9ou8prnosgb4o6881e5k.apps.googleusercontent.com</string>
     <string name="client_secret">NqO9PVvbPOhXhCfaaIbqtsiK</string>
     <string name="delete_items_title">Delete?</string>
