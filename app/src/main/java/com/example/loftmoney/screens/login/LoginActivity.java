@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginEnterView = findViewById(R.id.login_enter_view);
-        loginEnterView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_google), null, null,null);
+        loginEnterView.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_google), null, null, null);
 
         configureGoogleAuth();
         configureView();
@@ -52,28 +52,24 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-            if (requestCode == RC_SIGN_IN) {
-                // The Task returned from this call is always completed, no need to attach
-                // a listener.
-                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                handleSignInResult(task);
-            }
+
+        if (requestCode == RC_SIGN_IN) {
+
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
         }
+    }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-            // Signed in successfully, show authenticated UI.
-            if(account != null) {
+            if (account != null) {
                 loginViewModel.makeLogin(((LoftApp) getApplication()).authApi, account.getId());
             } else {
                 Log.e("TAG", "Can't parse account");
             }
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.e("TAG", "signInResult:failed code=" + e.getStatusCode());
         }
     }
@@ -82,34 +78,33 @@ public class LoginActivity extends AppCompatActivity {
 
 
         loginEnterView.setOnClickListener(v -> {
-           //loginViewModel.makeLogin(((LoftApp) getApplication()).authApi);
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
 
     private void configureViewModel() {
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
-        loginViewModel.messageString.observe(this,error ->{
-            if(!TextUtils.isEmpty(error)) {
+        loginViewModel.messageString.observe(this, error -> {
+            if (!TextUtils.isEmpty(error)) {
 
-        }
-            Toast.makeText(getApplicationContext(),error,Toast.LENGTH_LONG).show();
+            }
+            Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
         });
 
-            loginViewModel.authToken.observe(this, authToken -> {
-                if (!TextUtils.isEmpty((authToken))) {
-                  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name), 0);
-                  sharedPreferences.edit().putString(LoftApp.AUTH_KEY, authToken).apply();
+        loginViewModel.authToken.observe(this, authToken -> {
+            if (!TextUtils.isEmpty((authToken))) {
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.app_name), 0);
+                sharedPreferences.edit().putString(LoftApp.AUTH_KEY, authToken).apply();
 
-                  Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                  startActivity(intent);
-                  //Анимация alpha на окно авторизации.
-                  overridePendingTransition(R.anim.alpha_in,R.anim.alpha_out);
-                  finish();
-                }
-            });
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                //Анимация alpha на окно авторизации.
+                overridePendingTransition(R.anim.alpha_in, R.anim.alpha_out);
+                finish();
+            }
+        });
 
     }
 }

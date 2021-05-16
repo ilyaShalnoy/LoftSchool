@@ -17,11 +17,37 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            resValue("string", "app_name", "loftmoney-debug")
+        }
+
         release {
-            minifyEnabled false
+            resValue("string", "app_name", "LoftMoney")
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions 'target'
+
+    productFlavors {
+        mobile {
+            dimension 'target'
+            applicationId "com.example.loftmoney.primary"
+            resValue("color", "colorPrimary", "#3574fa")
+            resValue("color", "colorPrimaryDark", "#2056C9")
+            resValue("color", "colorAccent", "#ffc107")
+        }
+
+        otherColors {
+            applicationIdSuffix ".otherColors"
+            resValue("color", "colorPrimary", "#43a047")
+            resValue("color", "colorPrimaryDark", "#43a047")
+            resValue("color", "colorAccent", "#c0ca33")
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

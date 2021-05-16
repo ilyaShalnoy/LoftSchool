@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="app_name">ЛофтДеньги</string>
+    <string name="app_name">LoftMoney</string>
     <string name="name_hint">Наименование</string>
     <string name="price_hint">Цена</string>
     <string name="add_button">Добавить</string>
@@ -11,4 +11,12 @@
     <string name="toolbar_title">Учет бюджета</string>
     <string name="selected">Выделено: </string>/>
     <string name="success_added">Добавление прошло успешно</string>
+    <string name="delete_items_title">Удалить?</string>
+    <string name="delete_items_message">Удалить выбранные элементы?</string>
+    <string name="action_no">Нет</string>
+    <string name="action_yes">Да</string>
+    <string name="balance_finance_title">Доступные финансы</string>
+    <string name="income">Доход</string>
+    <string name="expense">Расход</string>
+    <string name="action_login"> Войти</string>/>
 </resources>

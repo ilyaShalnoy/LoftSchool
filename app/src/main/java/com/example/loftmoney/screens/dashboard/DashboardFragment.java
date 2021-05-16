@@ -1,10 +1,7 @@
 package com.example.loftmoney.screens.dashboard;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,22 +17,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.loftmoney.AddItemActivity;
-import com.example.loftmoney.LoftApp;
 import com.example.loftmoney.R;
 import com.example.loftmoney.screens.balance.BalanceFragment;
 import com.example.loftmoney.screens.dashboard.adapter.FragmentAdapter;
 import com.example.loftmoney.screens.dashboard.adapter.FragmentItem;
-import com.example.loftmoney.screens.main.MainActivity;
-import com.example.loftmoney.screens.main.MainViewModel;
 import com.example.loftmoney.screens.money.BudgetEditListener;
 import com.example.loftmoney.screens.money.BudgetFragment;
 import com.example.loftmoney.screens.money.BudgetViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -49,8 +39,6 @@ public class DashboardFragment extends Fragment implements EditModeListener {
     private TabLayout tabView;
     private TextView dashboardTitleView;
     private ViewPager viewPager;
-    private BudgetViewModel budgetViewModel;
-
 
     @Nullable
     @Override
@@ -72,6 +60,7 @@ public class DashboardFragment extends Fragment implements EditModeListener {
         dashboardActionView = view.findViewById(R.id.dashboard_action_view);
         dashboardTitleView = view.findViewById(R.id.dashboard_title_view);
 
+        //делаем слушатель для отмены EditMode при нажатии кнопки назад.
         backButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,18 +84,18 @@ public class DashboardFragment extends Fragment implements EditModeListener {
                         .setPositiveButton(R.string.action_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                clearSelectedItems();     //TODO: Как реализовать удаление?
+                                clearSelectedItems();
                             }
                         })
                         .show();
             }
         });
 
+        //делаем слушатель для отмены EditMode при переходе на другую страницу.
         viewPager = view.findViewById(R.id.view_pager);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -116,7 +105,6 @@ public class DashboardFragment extends Fragment implements EditModeListener {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -126,18 +114,16 @@ public class DashboardFragment extends Fragment implements EditModeListener {
         viewPager.setAdapter(fragmentAdapter);
         viewPager.setOffscreenPageLimit(3);
         tabView.setupWithViewPager(viewPager);
-
     }
 
-
-    @Override
+    @Override // перекрашиваем элементы фрагмента, когда входим в ActionMode.
     public void onEditModeChanged(boolean status) {
         toolbarView.setBackgroundColor(ContextCompat.getColor(getContext(), status ? R.color.selectionColorPrimary : R.color.colorPrimary));
         dashboardActionView.setVisibility(status ? View.VISIBLE : View.GONE);
-        backButtonView.setVisibility(status ? View.VISIBLE : View.INVISIBLE);
+        backButtonView.setVisibility(status ? View.VISIBLE : View.GONE);
         tabView.setBackgroundColor(ContextCompat.getColor(getContext(), status ? R.color.selectionColorPrimary : R.color.colorPrimary));
 
-
+         // перекрашиваем StatusBar
         Window window = getActivity().getWindow();
 
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -162,7 +148,7 @@ public class DashboardFragment extends Fragment implements EditModeListener {
     }
 
     private void clearSelectedItems() {
-        Fragment fragment = getChildFragmentManager().getFragments().get(viewPager.getCurrentItem());
+        Fragment fragment = getChildFragmentManager().getFragments().get(viewPager.getCurrentItem()); // получаем текущий фрагмент.
         if (fragment instanceof BudgetEditListener) {
             ((BudgetEditListener) fragment).onClearSelectedClick();
         }
